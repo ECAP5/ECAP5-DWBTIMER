@@ -28,15 +28,19 @@
 #include <svdpi.h>
 
 #include "Vtb_ecap5_dwbtimer.h"
+#include "Vtb_ecap5_dwbtimer_ecap5_dwbtimer__Cf4240.h"
 #include "Vtb_ecap5_dwbtimer_tb_ecap5_dwbtimer.h"
-#include "Vtb_ecap5_dwbtimer_ecap5_dwbtimer.h"
 #include "testbench.h"
 
 enum CondId {
+  COND_register,
+  COND_precision,
   __CondIdEnd
 };
 
 enum TestcaseId {
+  T_REGISTERS = 0,
+  T_PRECISION = 1
 };
 
 enum StateId {
@@ -66,25 +70,86 @@ public:
 
   }
 
-  void read(uint32_t addr) {
+  uint32_t read(uint32_t addr) {
     this->core->wb_adr_i = addr;
     this->core->wb_dat_i = 0;
     this->core->wb_we_i = 0;
     this->core->wb_sel_i = 0xF;
     this->core->wb_stb_i = 1;
     this->core->wb_cyc_i = 1;
-  }
 
-  void write(uint32_t addr, uint32_t data) {
-    this->core->wb_adr_i = addr;
-    this->core->wb_dat_i = data;
-    this->core->wb_we_i = 1;
-    this->core->wb_sel_i = 0xF;
-    this->core->wb_stb_i = 1;
+    this->tick();
+
+    this->_nop();
     this->core->wb_cyc_i = 1;
+
+    uint32_t read_data = this->core->wb_dat_o;
+
+    this->tick();
+
+    this->_nop();
+    this->tick();
+
+    return read_data;
+  }
+};
+
+void tb_ecap5_dwbtimer_registers(TB_Ecap5_dwbtimer * tb) {
+  Vtb_ecap5_dwbtimer * core = tb->core;
+  core->testcase = T_REGISTERS;
+
+  //=================================
+  //      Tick (0)
+  
+  tb->reset();
+
+  uint32_t timebase_low = tb->read(0);
+  uint32_t timebase_high = tb->read(4);
+
+  tb->check(COND_register, ((timebase_low == 0) && (timebase_high == 0)));
+
+  tb->n_tick(1000);
+
+  timebase_low = tb->read(0);
+  timebase_high = tb->read(4);
+  tb->check(COND_register, ((timebase_low == 1) && (timebase_high == 0)));
+
+  //`````````````````````````````````
+  //      Formal Checks 
+  
+  CHECK("tb_ecap5_dwbtimer.registers.01",
+      tb->conditions[COND_register],
+      "Failed to implement the registers", tb->err_cycles[COND_register]);
+}
+
+void tb_ecap5_dwbtimer_precision(TB_Ecap5_dwbtimer * tb) {
+  Vtb_ecap5_dwbtimer * core = tb->core;
+  core->testcase = T_PRECISION;
+
+  //=================================
+  //      Tick (0)
+  
+  tb->reset();
+
+  for(int i = 0; i < 100; i++) {
+    uint32_t num_cycles = 0;
+    uint64_t current_timebase = core->tb_ecap5_dwbtimer->dut->timebase_q;
+    // wait for the timebase to change
+    while(current_timebase == core->tb_ecap5_dwbtimer->dut->timebase_q) {
+      tb->tick();
+      num_cycles += 1; 
+    }
+
+    tb->check(COND_precision, (num_cycles == 1000));
   }
 
-};
+  //`````````````````````````````````
+  //      Formal Checks 
+  
+  CHECK("tb_ecap5_dwbtimer.precision.01",
+      tb->conditions[COND_precision],
+      "Failed to implement the required precision", tb->err_cycles[COND_precision]);
+}
 
 int main(int argc, char ** argv, char ** env) {
   srand(time(NULL));
@@ -98,8 +163,13 @@ int main(int argc, char ** argv, char ** env) {
   tb->set_debug_log(verbose);
   tb->init_conditions(__CondIdEnd);
 
+  // 1MHz = 1000000ps
+  tb->clk_period_in_ps = 1000000;
+
   /************************************************************/
 
+  tb_ecap5_dwbtimer_registers(tb);
+  tb_ecap5_dwbtimer_precision(tb);
 
   /************************************************************/
 
