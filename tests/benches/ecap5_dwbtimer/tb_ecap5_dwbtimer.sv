@@ -38,10 +38,12 @@ module tb_ecap5_dwbtimer
   input   logic        wb_stb_i,
   output  logic        wb_ack_o,
   input   logic        wb_cyc_i,
-  output  logic        wb_stall_o,
+  output  logic        wb_stall_o
 );
 
-ecap5_dwbtimer dut (
+ecap5_dwbtimer #(
+  .CLK_FREQ (1000000) 
+) dut (
   .clk_i           (clk_i),
   .rst_i           (rst_i),
 
@@ -53,7 +55,12 @@ ecap5_dwbtimer dut (
   .wb_stb_i   (wb_stb_i),
   .wb_ack_o   (wb_ack_o),
   .wb_cyc_i   (wb_cyc_i),
-  .wb_stall_o (wb_stall_o),
+  .wb_stall_o (wb_stall_o)
 );
 
 endmodule // tb_ecap5_dwbtimer
+
+`verilator_config
+
+public -module "ecap5_dwbtimer" -var "timebase_q"
+

@@ -1,0 +1,68 @@
+[*]
+[*] GTKWave Analyzer v4.0.0-prealpha (f3082e4) (w)1999-2022 BSI
+[*] Sat Dec  6 21:48:45 2025
+[*]
+[dumpfile] "/Users/cchaine/Desktop/Documents/projects/.ecap5.nosync/design/wbtimer/build/tests/waves/ecap5_dwbtimer.vcd"
+[dumpfile_mtime] "Sat Dec  6 21:47:28 2025"
+[dumpfile_size] 11810696
+[savefile] "/Users/cchaine/Desktop/Documents/projects/.ecap5.nosync/design/wbtimer/config/gtkwave/config/ecap5_dwbtimer.gtkw"
+[timestart] 1000190000
+[size] 1333 600
+[pos] -1 -1
+*-22.390770 1013100000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[markername] AA
+[markername] BB
+[markername] CC
+[markername] DD
+[markername] EE
+[markername] FF
+[markername] GG
+[markername] HH
+[markername] II
+[markername] JJ
+[markername] KK
+[markername] LL
+[markername] MM
+[markername] NN
+[markername] OO
+[markername] PP
+[markername] QQ
+[markername] RR
+[markername] SS
+[markername] TT
+[markername] UU
+[markername] VV
+[markername] WW
+[markername] XX
+[markername] YY
+[markername] ZZ
+[treeopen] TOP.
+[treeopen] TOP.tb_ecap5_dwbtimer.
+[sst_width] 255
+[signals_width] 161
+[sst_expanded] 1
+[sst_vpaned_height] 159
+@2024
+[color] 1
+^1 /Users/cchaine/Desktop/Documents/projects/.ecap5.nosync/design/wbtimer/config/gtkwave/filters/ecap5_dwbtimer_filter.gtkw
+TOP.tb_ecap5_dwbtimer.testcase[31:0]
+@28
+TOP.tb_ecap5_dwbtimer.clk_i
+TOP.tb_ecap5_dwbtimer.rst_i
+@22
+TOP.tb_ecap5_dwbtimer.dut.timebase_q[63:0]
+[color] 2
+TOP.tb_ecap5_dwbtimer.wb_adr_i[31:0]
+[color] 2
+TOP.tb_ecap5_dwbtimer.wb_dat_o[31:0]
+@28
+[color] 2
+TOP.tb_ecap5_dwbtimer.wb_ack_o
+[color] 2
+TOP.tb_ecap5_dwbtimer.wb_stb_i
+[color] 2
+TOP.tb_ecap5_dwbtimer.wb_cyc_i
+[color] 2
+TOP.tb_ecap5_dwbtimer.wb_stall_o
+[pattern_trace] 1
+[pattern_trace] 0
